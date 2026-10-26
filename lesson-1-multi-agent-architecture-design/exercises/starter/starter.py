@@ -30,6 +30,8 @@ def create_diagram(title, nodes, edges, node_labels=None, node_types=None, edge_
     pos["Arrernte Language Specialist"] = (2*horizontal_spacing, vertical_spacing)
     pos["Pitjantjatjara Language Specialist"] = (2*horizontal_spacing, -vertical_spacing)
     pos["Knowledge Base Lookup"] = (3*horizontal_spacing, 0)
+    pos["Cultural Sensitivity Checker"] = (4*horizontal_spacing, 0)
+    pos["Translation Verification Agent"] = (1.5*horizontal_spacing, 1.6*vertical_spacing)
     
     node_colors = []
     node_shapes = []
@@ -156,7 +158,8 @@ def extended_uluru_exercise():
         "Arrernte Language Specialist",
         "Pitjantjatjara Language Specialist",
         "Knowledge Base Lookup",
-        # TODO: Add your new nodes here
+        "Cultural Sensitivity Checker",
+        "Translation Verification Agent",
     ]
     
     edges = [
@@ -165,12 +168,15 @@ def extended_uluru_exercise():
         ("Language Identification", "Pitjantjatjara Language Specialist"),
         ("Arrernte Language Specialist", "Knowledge Base Lookup"),
         ("Pitjantjatjara Language Specialist", "Knowledge Base Lookup"),
-        ("Knowledge Base Lookup", "Arrernte Language Specialist"),
-        ("Knowledge Base Lookup", "Pitjantjatjara Language Specialist"),
-        ("Arrernte Language Specialist", "Language Identification"),
-        ("Pitjantjatjara Language Specialist", "Language Identification"),
-        ("Language Identification", "Visitor Input"),
-        # TODO: Add your new edges here
+        # Knowledge now passes through the checker before reaching specialists
+        ("Knowledge Base Lookup", "Cultural Sensitivity Checker"),
+        ("Cultural Sensitivity Checker", "Arrernte Language Specialist"),
+        ("Cultural Sensitivity Checker", "Pitjantjatjara Language Specialist"),
+        # Specialists now go through the verifier before the response goes out
+        ("Arrernte Language Specialist", "Translation Verification Agent"),
+        ("Pitjantjatjara Language Specialist", "Translation Verification Agent"),
+        ("Translation Verification Agent", "Language Identification"),
+        ("Language Identification", "Visitor Input")
     ]
     
     node_types = {
@@ -179,12 +185,14 @@ def extended_uluru_exercise():
         "Arrernte Language Specialist": "agent",
         "Pitjantjatjara Language Specialist": "agent",
         "Knowledge Base Lookup": "tool",
-        # TODO: Add types for your new nodes here
+        "Cultural Sensitivity Checker": "tool",
+        "Translation Verification Agent": "agent"
     }
 
     edge_labels = {
-        ("Language Identification", "Visitor Input"): "Formatted Response",
-        # TODO: Add new edge labels here
+        ("Knowledge Base Lookup", "Cultural Sensitivity Checker"): "Raw knowledge",
+        ("Translation Verification Agent", "Language Identification"): "Verified translation",
+        ("Language Identification", "Visitor Input"): "Formatted Response"
     }
 
     create_diagram(
